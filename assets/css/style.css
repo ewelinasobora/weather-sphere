@@ -1,0 +1,24 @@
+:root {
+  --dusty-pink: rgb(250, 150, 150);
+  --navy: rgb(27, 18, 40);
+  --gray: rgb(68, 74, 96);
+  --light-gray: rgb(129, 139, 167);
+}
+
+/* Header Styling */
+.weather-logo {
+  display:flex;
+  width: 200px;
+  height: 200px;
+  /* adds margin to create space between logo and header */
+  margin-right: 30px;
+}
+
+.weather-header {
+  display: flex;
+  /* centers the content horizontally */
+  justify-content: center;
+  /* centers the content vertically */
+  align-items: center;
+  background-image: linear-gradient(to left, var(--light-gray), var(--gray), var(--navy));
+}
