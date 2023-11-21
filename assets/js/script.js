@@ -1,15 +1,23 @@
 const searchInput = $("#search-input");
 // function handles events where one button is clicked
- $("#search-button").on("click", function(event) {
+$("#search-button").on("click", function (event) {
   event.preventDefault();
-   // it grabs the input from the textbox
-   const cityName = searchInput.val().trim();
+  // store the input from the search input
+  const cityName = searchInput.val().trim();
 
-   // it stores the input in local storage
-   localStorage.setItem("cityName", cityName);
-   getWeatherBy(cityName)
+  // get the existing cities from local storage
+  let cities = localStorage.getItem("cityName");
+  cities = cities ? JSON.parse(cities) : [];
 
- });
+  // push the new city to the array
+  cities.push(cityName);
+
+  // store the updated array in local storage
+  localStorage.setItem("cityName", JSON.stringify(cities));
+
+
+  getWeatherBy(cityName);
+});
 
 function getWeatherBy(cityName) {
 
