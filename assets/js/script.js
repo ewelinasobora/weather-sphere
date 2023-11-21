@@ -2,19 +2,24 @@ const searchInput = $("#search-input");
 // function handles events where one button is clicked
 $("#search-button").on("click", function (event) {
   event.preventDefault();
-  // store the input from the search input
+  // stores the input from the search input
   const cityName = searchInput.val().trim();
 
-  // get the existing cities from local storage
+  // gets the existing cities from local storage
   let cities = localStorage.getItem("cityName");
   cities = cities ? JSON.parse(cities) : [];
 
-  // push the new city to the array
-  cities.push(cityName);
+  // creates a Set from the cities array to remove duplicates
+  const citiesSet = new Set(cities);
 
-  // store the updated array in local storage
+  // adds the new city to the Set
+  citiesSet.add(cityName.charAt(0).toUpperCase() + cityName.slice(1));
+
+  // converts the Set back to an array
+  cities = Array.from(citiesSet);
+
+  // stores the updated array in local storage
   localStorage.setItem("cityName", JSON.stringify(cities));
-
 
   getWeatherBy(cityName);
 });
@@ -25,7 +30,7 @@ function getWeatherBy(cityName) {
 
   fetch(apiUrl)
     .then(function (response) {
-    // returning the json data from the url
+      // returns the json data from the url
       return response.json();
     })
     // executes function after we get the data
