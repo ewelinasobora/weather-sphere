@@ -104,7 +104,7 @@ function displayForecast(weatherData) {
     let unixTime = forecast[day].dt;
     let thisDate = new Date(unixTime * 1000);
 
-    let formattedThisDate = moment(thisDate).format('YYYY-MM-DD')
+    let formattedThisDate = moment(thisDate).format('DD-MM-YYYY')
 
     // Converts temperature from Kelvin to Celsius
     const celsiusTemp = Math.round((forecast[day].main.temp - 273.15).toFixed(2));
