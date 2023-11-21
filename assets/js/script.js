@@ -39,3 +39,21 @@ function getWeatherBy(cityName) {
       console.log(data);
     })
 }
+
+
+function showSavedCities() {
+  let cities = JSON.parse(localStorage.getItem("cityName"));
+
+  $("#history").empty();
+
+  for (const city of cities) {
+    // creates a button for each city in the array with onclick event that calls getWeatherBy function
+    const btn = $(`
+    <button class="btn" onclick="getWeatherBy('${city}')">${city}</button>
+    `)
+    $("#history").append(btn)
+  }
+}
+
+
+showSavedCities();
