@@ -54,3 +54,8 @@
   border-radius: 5px;
   width: 100%;
 }
+
+.weather-icon {
+  width: 5%;
+  height: 5%;
+}

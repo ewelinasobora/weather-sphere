@@ -1,4 +1,6 @@
 const searchInput = $("#search-input");
+const todaySection = $("#today");
+const forecastSection = $("#forecast");
 // function handles events where one button is clicked
 $("#search-button").on("click", function (event) {
   event.preventDefault();
@@ -35,8 +37,7 @@ function getWeatherBy(cityName) {
     })
     // executes function after we get the data
     .then(function (data) {
-
-      console.log(data);
+      displayCurrentWeather(data);
     })
 }
 
@@ -49,11 +50,39 @@ function showSavedCities() {
   for (const city of cities) {
     // creates a button for each city in the array with onclick event that calls getWeatherBy function
     const btn = $(`
+    <div>
     <button class="btn" onclick="getWeatherBy('${city}')">${city}</button>
+    </div>
     `)
     $("#history").append(btn)
   }
 }
+
+
+function displayCurrentWeather(weatherData) {
+  const currentWeather = weatherData.list[0];
+
+  todaySection.empty();
+
+  // Converts temperature from Kelvin to Celsius
+  const celsiusTemp = Math.round((currentWeather.main.temp - 273.15).toFixed(2));
+  // Converts wind speed from mph to kph
+  const windKPH = Math.round((currentWeather.wind.speed * 1.60934).toFixed(2));
+
+  const html = `
+  <div class="card">
+    <h2>${weatherData.city.name} (${dayjs().format("M/D/YYYY")})
+    <img class="weather-icon" src="https://openweathermap.org/img/w/${currentWeather.weather[0].icon}.png" alt="${currentWeather.weather[0].description}">
+    </h2>
+    <p>Temperature: ${celsiusTemp} °C</p>
+    <p>Wind: ${windKPH} KPH</p>
+    <p>Humidity: ${currentWeather.main.humidity}%</p>
+  </div>
+  `;
+
+  todaySection.append(html);
+}
+
 
 
 showSavedCities();
