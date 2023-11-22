@@ -1,3 +1,4 @@
+const searchForm = $("#search-form").addClass("d-grid");
 const searchInput = $("#search-input");
 const todaySection = $("#today");
 const forecastSection = $("#forecast");
@@ -5,9 +6,9 @@ const today = dayjs();
 const currentHour = today.hour()
 const row = $("<div class='row'>");
 const forecastRow = forecastSection.append(row);
+const historySection = $("#history").addClass(" gap-2");
 
-
-// function handles events where one button is clicked
+// function handles events where search button is clicked
 $("#search-button").on("click", function (event) {
   event.preventDefault();
   // stores the input from the search input
@@ -43,56 +44,28 @@ function getWeatherBy(cityName) {
     })
     // executes function after we get the data
     .then(function (data) {
-      displayCurrentWeather(data);
+      // displayCurrentWeather(data);
       displayForecast(data);
     })
 }
-
 
 function showSavedCities() {
   // gets the existing cities from local storage
   let cities = JSON.parse(localStorage.getItem("cityName") || "[]");
 
-  $("#history").empty();
+  historySection.empty();
 
   for (const city of cities) {
     // creates a button for each city in the array with onclick event that calls getWeatherBy function
     const btn = $(`
-    <div>
-    <button class="btn" onclick="getWeatherBy('${city}')">${city}</button>
-    </div>
+    <button class="btn btn-secondary" onclick="getWeatherBy('${city}')">${city}</button>
     `)
-    $("#history").append(btn)
+    historySection.append(btn)
   }
 }
 
-
-function displayCurrentWeather(weatherData) {
-  const currentWeather = weatherData.list[0];
-
-  todaySection.empty();
-
-  // Converts temperature from Kelvin to Celsius
-  const celsiusTemp = Math.round((currentWeather.main.temp - 273.15).toFixed(2));
-  // Converts wind speed from mph to kph
-  const windKPH = Math.round((currentWeather.wind.speed * 1.60934).toFixed(2));
-
-  // creates card with current weather data
-  const html = `
-  <div class="card">
-    <h2>${weatherData.city.name} (${today.format("M/D/YYYY")})
-    <img class="weather-icon" src="https://openweathermap.org/img/w/${currentWeather.weather[0].icon}.png" alt="${currentWeather.weather[0].description}">
-    </h2>
-    <p>Temperature: ${celsiusTemp} °C</p>
-    <p>Wind: ${windKPH} KPH</p>
-    <p>Humidity: ${currentWeather.main.humidity}%</p>
-  </div>
-  `;
-
-  todaySection.append(html);
-}
-
 function displayForecast(weatherData) {
+  todaySection.empty();
   forecastSection.empty();
 
   const forecast = weatherData.list;
@@ -104,19 +77,32 @@ function displayForecast(weatherData) {
     let unixTime = forecast[day].dt;
     let thisDate = new Date(unixTime * 1000);
 
-    let formattedThisDate = moment(thisDate).format('DD-MM-YYYY')
+    let formattedThisDate = moment(thisDate).format('DD/MM/YYYY')
+    let formattedToday = moment(today).format('DD/MM/YYYY')
 
     // Converts temperature from Kelvin to Celsius
     const celsiusTemp = Math.round((forecast[day].main.temp - 273.15).toFixed(2));
     // Converts wind speed from mph to kph
     const windKPH = Math.round((forecast[day].wind.speed * 1.60934).toFixed(2));
 
+    // creates main card with current weather data
+    const mainCard = `
+    <div class="card p-3">
+      <h2>${weatherData.city.name} ${formattedThisDate}
+      <img class="weather-icon" src="https://openweathermap.org/img/w/${forecast[day].weather[0].icon}.png" alt="${forecast[day].weather[0].description}">
+      </h2>
+      <p>Temperature: ${celsiusTemp} °C</p>
+      <p>Wind: ${windKPH} KPH</p>
+      <p>Humidity: ${forecast[day].main.humidity}%</p>
+    </div>
+    `;
+
     // creates cards with forecast data
-    const html = `
-    <div class="col-lg-2 mb-3 mb-sm-2">
-      <div class="card">
+    const cards = `
+    <div class="col-lg-3 mb-3 mb-md-2">
+      <div class="card forecast-card text-bg-secondary p-3">
         <h3>${formattedThisDate}</h3>
-        <img class="weather-icon" src="https://openweathermap.org/img/w/${forecast[day].weather[0].icon}.png" alt="${forecast[day].weather[0].description}">
+        <img class="forecast-icon" src="https://openweathermap.org/img/w/${forecast[day].weather[0].icon}.png" alt="${forecast[day].weather[0].description}">
         <p>Temperature: ${celsiusTemp} °C</p>
         <p>Wind: ${windKPH} KPH</p>
         <p>Humidity: ${forecast[day].main.humidity}%</p>
@@ -124,7 +110,13 @@ function displayForecast(weatherData) {
     </div>
       `;
 
-    forecastRow.append(html);
+    if (formattedThisDate === formattedToday) {
+      todaySection.append(mainCard);
+    } else {
+      forecastRow.append(cards);
+    }
+
+
   }
 }
 
