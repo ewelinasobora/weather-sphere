@@ -2,6 +2,9 @@
 
 This is a weather dashboard application that allows users check forecast for a searched city. This app runs in the browser and features dynamically updated HTML and CSS powered by jQuery.
 
+![Screenshot 2023-11-22 at 13 23 31](https://github.com/ewelinasobora/weather-sphere/assets/11948354/c466ee6d-335f-434a-b9cb-574f065a8209)
+
+
 ## Table of Contents
 
 - [Demo](#demo)
@@ -12,7 +15,7 @@ This is a weather dashboard application that allows users check forecast for a s
 
 ## Demo
 
-You can see this deployed project at [https://ewelinasobora.github.io/weather-sphere/](https://ewelinasobora.github.io/weather-sphere/)
+You can see this deployed project at [weather-sphere](https://ewelinasobora.github.io/weather-sphere/)
 
 ## Features
 
